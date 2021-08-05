@@ -83,7 +83,7 @@ class App {
   constructor() {
     // as the constructor is called as soon as an object is created we are using it to call all the methods we need initially
     this._workouts = [];
-    this.mapZoomLevel = 13;
+    this.mapZoomLevel = 15;
     this._getPosition();
     this._getLocalStorage();
 
@@ -173,11 +173,11 @@ class App {
     inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
   } // modify this later
 
-  _newWorkout(e) {
-    const validInputs = (...inputs) =>
-      inputs.every(inp => Number.isFinite(inp));
+  _validInputs = (...inputs) => inputs.every(inp => Number.isFinite(inp));
 
-    const allPositive = (...inputs) => inputs.every(inp => inp > 0);
+  _allPositive = (...inputs) => inputs.every(inp => inp > 0);
+
+  _newWorkout(e) {
     e.preventDefault();
 
     // Get data from the form
@@ -194,8 +194,8 @@ class App {
 
       // Check if data is valid
       if (
-        !validInputs(distance, duration, cadence) ||
-        !allPositive(distance, duration, cadence)
+        !this._validInputs(distance, duration, cadence) ||
+        !this._allPositive(distance, duration, cadence)
       )
         return alert('Please enter correct values');
 
@@ -208,8 +208,8 @@ class App {
 
       // Check if data is valid
       if (
-        !validInputs(distance, duration, elevation) ||
-        !allPositive(distance, duration)
+        !this._validInputs(distance, duration, elevation) ||
+        !this._allPositive(distance, duration)
       )
         return alert('Please enter correct values');
 
@@ -302,7 +302,7 @@ class App {
           <span class="workout__unit">m</span>
         </div>
       </li>`;
-    form.insertAdjacentHTML('afterend', html);
+    if (!editId) form.insertAdjacentHTML('afterend', html);
   }
 
   _moveToPopup(e) {
