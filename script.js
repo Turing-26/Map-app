@@ -368,6 +368,7 @@ class App {
       workout.distance = distance;
       workout.duration = duration;
       workout.cadence = cadence;
+      workout.pace = duration / distance;
     }
     if (type === 'cycling') {
       const elevation = +inputElevation.value;
@@ -383,6 +384,7 @@ class App {
       workout.distance = distance;
       workout.duration = duration;
       workout.elevGain = elevation;
+      workout.speed = distance / (duration / 60);
     }
 
     this._hideForm();
