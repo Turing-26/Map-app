@@ -369,7 +369,7 @@ class App {
       workout.duration = duration;
       workout.cadence = cadence;
     }
-    if (type === 'running') {
+    if (type === 'cycling') {
       const elevation = +inputElevation.value;
 
       // Check if data is valid
