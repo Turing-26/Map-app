@@ -326,7 +326,7 @@ class App {
     });
 
     // using public interface
-    // workout.click();
+    workout.click();
   }
 
   _setEditId(e) {
