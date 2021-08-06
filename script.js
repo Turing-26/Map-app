@@ -9,7 +9,7 @@ const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 let workoutEditEl;
 
-let map, mapEvent, btn, editId;
+let map, mapEvent, editId;
 
 class Workout {
   date = new Date();
