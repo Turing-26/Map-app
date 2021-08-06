@@ -301,7 +301,6 @@ class App {
           <span class="workout__unit">m</span>
         </div>
       </li>`;
-    console.log(workoutEditEl);
     if (!editId) form.insertAdjacentHTML('afterend', html);
     else workoutEditEl.insertAdjacentHTML('afterend', html);
   }
@@ -368,7 +367,7 @@ class App {
       workout.distance = distance;
       workout.duration = duration;
       workout.cadence = cadence;
-      workout.pace = duration / distance;
+      workout.pace = workout.calcPace();
     }
     if (type === 'cycling') {
       const elevation = +inputElevation.value;
@@ -384,7 +383,7 @@ class App {
       workout.distance = distance;
       workout.duration = duration;
       workout.elevGain = elevation;
-      workout.speed = distance / (duration / 60);
+      workout.speed = workout.calcSpeed();
     }
 
     this._hideForm();
@@ -406,8 +405,14 @@ class App {
     this._workouts = data;
     this._workouts.forEach(workout => {
       this._renderWorkout(workout);
-      //this._renderWorkoutMarker(workout);
+      if (workout.type === 'running') {
+        Object.setPrototypeOf(workout, Running.prototype);
+      }
+      if (workout.type === 'cycling') {
+        Object.setPrototypeOf(workout, Cycling.prototype);
+      }
     });
+    console.log(this._workouts);
   }
 
   reset() {
