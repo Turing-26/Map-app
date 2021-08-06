@@ -99,7 +99,6 @@ class App {
     containerWorkouts.addEventListener('click', e => {
       this._moveToPopup(e);
       this._setEditId(e);
-      // btn = '';
     });
   }
 
@@ -332,7 +331,7 @@ class App {
   }
 
   _setEditId(e) {
-    btn = e.target.closest('.btn');
+    const btn = e.target.closest('.btn');
 
     // Setting the ID of the workout to edit
     if (btn) {
