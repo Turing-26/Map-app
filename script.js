@@ -7,6 +7,7 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
+let workoutEditEl;
 
 let map, mapEvent, btn, editId;
 
@@ -100,7 +101,6 @@ class App {
       this._setEditId(e);
       // btn = '';
     });
-    // btnEdit.addEventListener('click', this._editWorkout.bind(this));
   }
 
   _getPosition() {
@@ -302,7 +302,9 @@ class App {
           <span class="workout__unit">m</span>
         </div>
       </li>`;
+    console.log(workoutEditEl);
     if (!editId) form.insertAdjacentHTML('afterend', html);
+    else workoutEditEl.insertAdjacentHTML('afterend', html);
   }
 
   _moveToPopup(e) {
@@ -342,23 +344,51 @@ class App {
 
   _editWorkout(e) {
     e.preventDefault();
-    const workoutEl = Array.from(document.querySelectorAll('.workout')).find(
+    workoutEditEl = Array.from(document.querySelectorAll('.workout')).find(
       work => work.dataset.id === editId
     );
-    workoutEl.parentNode.removeChild(workoutEl);
+    console.log(workoutEditEl);
+
     const workout = this._workouts.find(work => work.id === editId);
 
-    workout.type = inputType.value;
-    workout.distance = +inputDistance.value;
-    workout.duration = +inputDuration.value;
+    const type = inputType.value;
+    const distance = +inputDistance.value;
+    const duration = +inputDuration.value;
 
-    if (workout.type === 'running') {
-      workout.cadence = inputCadence.value;
+    if (type === 'running') {
+      const cadence = +inputCadence.value;
+
+      // Check if data is valid
+      if (
+        !this._validInputs(distance, duration, cadence) ||
+        !this._allPositive(distance, duration, cadence)
+      )
+        return alert('Please enter correct values');
+
+      workout.type = type;
+      workout.distance = distance;
+      workout.duration = duration;
+      workout.cadence = cadence;
     }
-    if (workout.type === 'cycling') workout.elevGain = inputElevation.value;
+    if (type === 'running') {
+      const elevation = +inputElevation.value;
+
+      // Check if data is valid
+      if (
+        !this._validInputs(distance, duration, elevation) ||
+        !this._allPositive(distance, duration)
+      )
+        return alert('Please enter correct values');
+
+      workout.type = type;
+      workout.distance = distance;
+      workout.duration = duration;
+      workout.elevGain = elevation;
+    }
 
     this._hideForm();
     this._renderWorkout(workout);
+    workoutEditEl.parentNode.removeChild(workoutEditEl);
     this._setLocalStorage();
   }
 
