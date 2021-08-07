@@ -138,7 +138,10 @@ class App {
       .openPopup();
 
     // Handling clicks on map
-    map.on('click', this._showForm.bind(this));
+    map.on('click', e => {
+      this._showForm(e);
+      editId = '';
+    });
 
     this._workouts.forEach(workout => {
       this._renderWorkoutMarker(workout);
