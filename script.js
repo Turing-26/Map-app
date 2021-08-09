@@ -337,17 +337,6 @@ class App {
     workout.click();
   }
 
-  // _setEditId(e) {
-  //   const btn = e.target.closest('.btn');
-
-  //   // Setting the ID of the workout to edit
-  //   if (btn) {
-  //     this._showForm();
-  //     editId = e.target.closest('.workout').dataset.id;
-  //     console.log(editId);
-  //   }
-  // }
-
   _editWorkout(e) {
     e.preventDefault();
     workoutEditEl = Array.from(document.querySelectorAll('.workout')).find(
