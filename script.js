@@ -179,6 +179,9 @@ class App {
 
   _allPositive = (...inputs) => inputs.every(inp => inp > 0);
 
+  _hasClass = (elem, className) =>
+    elem.className.split(' ').indexOf(className) > -1;
+
   _newWorkout(e) {
     e.preventDefault();
 
