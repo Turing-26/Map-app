@@ -98,7 +98,10 @@ class App {
     // containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
     containerWorkouts.addEventListener('click', e => {
       this._moveToPopup(e);
-      this._setEditId(e);
+      if (this._hasClass(e.target, 'btn')) {
+        this._showForm();
+        editId = e.target.closest('.workout').dataset.id;
+      }
     });
   }
 
@@ -179,8 +182,7 @@ class App {
 
   _allPositive = (...inputs) => inputs.every(inp => inp > 0);
 
-  _hasClass = (elem, className) =>
-    elem.className.split(' ').indexOf(className) > -1;
+  _hasClass = (elem, className) => elem.classList.contains(className);
 
   _newWorkout(e) {
     e.preventDefault();
@@ -335,16 +337,16 @@ class App {
     workout.click();
   }
 
-  _setEditId(e) {
-    const btn = e.target.closest('.btn');
+  // _setEditId(e) {
+  //   const btn = e.target.closest('.btn');
 
-    // Setting the ID of the workout to edit
-    if (btn) {
-      this._showForm();
-      editId = e.target.closest('.workout').dataset.id;
-      console.log(editId);
-    }
-  }
+  //   // Setting the ID of the workout to edit
+  //   if (btn) {
+  //     this._showForm();
+  //     editId = e.target.closest('.workout').dataset.id;
+  //     console.log(editId);
+  //   }
+  // }
 
   _editWorkout(e) {
     e.preventDefault();
