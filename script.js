@@ -98,7 +98,7 @@ class App {
     // containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
     containerWorkouts.addEventListener('click', e => {
       this._moveToPopup(e);
-      if (this._hasClass(e.target, 'btn')) {
+      if (this._hasClass(e.target, 'btn--edit')) {
         this._showForm();
         editId = e.target.closest('.workout').dataset.id;
       }
@@ -265,7 +265,8 @@ class App {
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
         <div class="workout__details">
           <h2 class="workout__title">${workout.description}</h2>
-          <a href="#" class="workout__unit btn">
+          <a href="#" class="workout__unit btn btn--del"> Delete </a>
+          <a href="#" class="workout__unit btn btn--edit">
             Edit
           </a>
         </div>

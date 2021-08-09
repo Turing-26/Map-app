@@ -7,6 +7,8 @@
   --color-light--1: #aaa;
   --color-light--2: #ececec;
   --color-light--3: rgb(214, 222, 224);
+  --color-del--1: #d11a2a;
+  --color-del--2: #810000;
 }
 
 * {
@@ -87,6 +89,7 @@ a:visited {
 .workout__title {
   font-size: 1.7rem;
   font-weight: 600;
+  flex-grow: 1;
 }
 
 .workout__details {
@@ -97,7 +100,7 @@ a:visited {
 .workout__details:first-of-type {
   grid-column: 1 / -1;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 }
 
 .workout__icon {
@@ -128,12 +131,23 @@ a:visited {
   display: inline-block;
   border-radius: 5px;
   padding: 5px;
+  margin: 0 5px;
   transition: all 0.2s;
 }
 
 .btn:hover,
 .btn:active {
   background-color: #3b4247;
+}
+
+.btn--del:link,
+.btn--del:visited {
+  background-color: var(--color-del--1);
+}
+
+.btn--del:hover,
+.btn--del:active {
+  background-color: var(--color-del--2);
 }
 
 .form {
