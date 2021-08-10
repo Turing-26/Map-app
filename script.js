@@ -385,6 +385,11 @@ class App {
       workout.distance = distance;
       workout.duration = duration;
       workout.cadence = cadence;
+      if (workout.elevGain) {
+        delete workout.elevGain;
+        delete workout.speed;
+      }
+      Object.setPrototypeOf(workout, Running.prototype);
       workout.pace = workout.calcPace();
     }
     if (type === 'cycling') {
@@ -400,6 +405,11 @@ class App {
       workout.distance = distance;
       workout.duration = duration;
       workout.elevGain = elevation;
+      if (workout.cadence) {
+        delete workout.cadence;
+        delete workout.pace;
+      }
+      Object.setPrototypeOf(workout, Cycling.prototype);
       workout.speed = workout.calcSpeed();
     }
 
