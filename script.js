@@ -356,9 +356,9 @@ class App {
     const index = this._workouts.findIndex(workout => {
       if (workout.id === editId) return true;
     });
-    this._workouts.splice(index, 1);
     markers[index].remove();
     markers.splice(index, 1);
+    this._workouts.splice(index, 1);
     this._setLocalStorage();
   }
 
