@@ -102,6 +102,10 @@ class App {
         this._showForm();
         editId = e.target.closest('.workout').dataset.id;
       }
+      if (this._hasClass(e.target, 'btn--del')) {
+        editId = e.target.closest('.workout').dataset.id;
+        this._delWorkout();
+      }
     });
   }
 
@@ -336,6 +340,18 @@ class App {
 
     // using public interface
     workout.click();
+  }
+
+  _delWorkout() {
+    workoutEditEl = Array.from(document.querySelectorAll('.workout')).find(
+      work => work.dataset.id === editId
+    );
+    workoutEditEl.parentNode.removeChild(workoutEditEl);
+
+    const index = this._workouts.findIndex(workout => {
+      if (workout.id === editId) return true;
+    });
+    this._workouts.splice(index, index + 1);
   }
 
   _editWorkout(e) {
