@@ -356,7 +356,6 @@ class App {
     const index = this._workouts.findIndex(workout => {
       if (workout.id === editId) return true;
     });
-    L.marker(this._workouts[index].coords).removeFrom(map);
     this._workouts.splice(index, 1);
     markers[index].remove();
     markers.splice(index, 1);
