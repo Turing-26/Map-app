@@ -131,7 +131,7 @@ a:visited {
   display: inline-block;
   border-radius: 5px;
   padding: 5px;
-  margin: 0 5px;
+  margin: 0 2px;
   transition: all 0.2s;
 }
 
