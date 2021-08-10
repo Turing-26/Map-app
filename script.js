@@ -9,11 +9,6 @@ const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 let workoutEditEl;
 
-let map,
-  mapEvent,
-  markers = [],
-  editId;
-
 class Workout {
   date = new Date();
   id = (Date.now() + '').slice(-10);
@@ -80,33 +75,34 @@ class Cycling extends Workout {
 // APPLICATION ARCHITECTURE
 
 class App {
-  // #map;
-  // #mapEvent;
-  // #mapZoomLevel;
+  #map;
+  #mapEvent;
+  #mapZoomLevel = 15;
+  #markers = [];
+  #editId;
 
   constructor() {
     // as the constructor is called as soon as an object is created we are using it to call all the methods we need initially
     this._workouts = [];
-    this.mapZoomLevel = 15;
     this._getPosition();
     this._getLocalStorage();
 
     // form.addEventListener('submit', this._newWorkout.bind(this));
     form.addEventListener('submit', e => {
-      if (editId) this._editWorkout(e);
+      if (this.#editId) this._editWorkout(e);
       else this._newWorkout(e);
-      editId = '';
+      this.#editId = '';
     });
     inputType.addEventListener('change', this._toggleElevationField);
     // containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
     containerWorkouts.addEventListener('click', e => {
       this._moveToPopup(e);
       if (this._hasClass(e.target, 'btn--edit')) {
-        editId = e.target.closest('.workout').dataset.id;
+        this.#editId = e.target.closest('.workout').dataset.id;
         this._showForm();
       }
       if (this._hasClass(e.target, 'btn--del')) {
-        editId = e.target.closest('.workout').dataset.id;
+        this.#editId = e.target.closest('.workout').dataset.id;
         this._delWorkout();
       }
     });
@@ -132,7 +128,7 @@ class App {
 
     // Leaflet API
     // this.#map = L.map('map').setView(coords, 13); // also gives an error as the this keyword is undefined
-    map = L.map('map').setView(coords, this.mapZoomLevel);
+    this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
     // console.log(map);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -140,17 +136,17 @@ class App {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }) /*.addTo(this.#map);*/
-      .addTo(map);
+      .addTo(this.#map);
 
     L.marker(coords)
-      .addTo(map)
+      .addTo(this.#map)
       .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
       .openPopup();
 
     // Handling clicks on map
-    map.on('click', e => {
+    this.#map.on('click', e => {
       this._showForm(e);
-      editId = '';
+      this.#editId = '';
     });
 
     this._workouts.forEach(workout => {
@@ -160,7 +156,7 @@ class App {
 
   _showForm(mapE) {
     // this.#mapEvent = mapE;
-    mapEvent = mapE;
+    this.#mapEvent = mapE;
     form.classList.remove('hidden');
     inputDistance.focus();
   }
@@ -198,7 +194,7 @@ class App {
     const type = inputType.value;
     const distance = +inputDistance.value;
     const duration = +inputDuration.value;
-    const { lat, lng } = mapEvent.latlng;
+    const { lat, lng } = this.#mapEvent.latlng;
     // const { lat, lng } = this.#mapEvent.latlng;
     let workout;
 
@@ -239,7 +235,7 @@ class App {
     // Render workout on list
     this._renderWorkout(workout);
 
-    console.log(mapEvent);
+    console.log(this.#mapEvent);
 
     // Hide form + Clear Input fields
     this._hideForm();
@@ -250,9 +246,9 @@ class App {
 
   _renderWorkoutMarker(workout) {
     // Display markers
-    markers.push(
+    this.#markers.push(
       L.marker(workout.coords)
-        .addTo(map)
+        .addTo(this.#map)
         .bindPopup(
           L.popup({
             maxWidth: 250,
@@ -319,7 +315,7 @@ class App {
           <span class="workout__unit">m</span>
         </div>
       </li>`;
-    if (!editId) form.insertAdjacentHTML('afterend', html);
+    if (!this.#editId) form.insertAdjacentHTML('afterend', html);
     else workoutEditEl.insertAdjacentHTML('afterend', html);
   }
 
@@ -336,7 +332,7 @@ class App {
     );
     // console.log(workout);
 
-    map.setView(workout.coords, this.mapZoomLevel, {
+    this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
       pan: {
         duration: 1,
@@ -349,15 +345,15 @@ class App {
 
   _delWorkout() {
     workoutEditEl = Array.from(document.querySelectorAll('.workout')).find(
-      work => work.dataset.id === editId
+      work => work.dataset.id === this.#editId
     );
     workoutEditEl.parentNode.removeChild(workoutEditEl);
 
     const index = this._workouts.findIndex(workout => {
-      if (workout.id === editId) return true;
+      if (workout.id === this.#editId) return true;
     });
-    markers[index].remove();
-    markers.splice(index, 1);
+    this.#markers[index].remove();
+    this.#markers.splice(index, 1);
     this._workouts.splice(index, 1);
     this._setLocalStorage();
   }
@@ -365,15 +361,16 @@ class App {
   _editWorkout(e) {
     e.preventDefault();
     workoutEditEl = Array.from(document.querySelectorAll('.workout')).find(
-      work => work.dataset.id === editId
+      work => work.dataset.id === this.#editId
     );
     console.log(workoutEditEl);
 
-    const workout = this._workouts.find(work => work.id === editId);
+    const workout = this._workouts.find(work => work.id === this.#editId);
 
     const type = inputType.value;
     const distance = +inputDistance.value;
     const duration = +inputDuration.value;
+    workout.type = type;
 
     if (type === 'running') {
       const cadence = +inputCadence.value;
@@ -385,7 +382,6 @@ class App {
       )
         return alert('Please enter correct values');
 
-      workout.type = type;
       workout.distance = distance;
       workout.duration = duration;
       workout.cadence = cadence;
@@ -401,7 +397,6 @@ class App {
       )
         return alert('Please enter correct values');
 
-      workout.type = type;
       workout.distance = distance;
       workout.duration = duration;
       workout.elevGain = elevation;
