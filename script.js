@@ -9,7 +9,10 @@ const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 let workoutEditEl;
 
-let map, mapEvent, editId;
+let map,
+  mapEvent,
+  markers = [],
+  editId;
 
 class Workout {
   date = new Date();
@@ -247,21 +250,23 @@ class App {
 
   _renderWorkoutMarker(workout) {
     // Display markers
-    L.marker(workout.coords)
-      .addTo(map)
-      .bindPopup(
-        L.popup({
-          maxWidth: 250,
-          minWidth: 100,
-          autoClose: false,
-          closeOnClick: false,
-          className: `${workout.type}-popup`,
-        })
-      )
-      .setPopupContent(
-        `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
-      )
-      .openPopup();
+    markers.push(
+      L.marker(workout.coords)
+        .addTo(map)
+        .bindPopup(
+          L.popup({
+            maxWidth: 250,
+            minWidth: 100,
+            autoClose: false,
+            closeOnClick: false,
+            className: `${workout.type}-popup`,
+          })
+        )
+        .setPopupContent(
+          `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
+        )
+        .openPopup()
+    );
   }
 
   _renderWorkout(workout) {
@@ -351,7 +356,11 @@ class App {
     const index = this._workouts.findIndex(workout => {
       if (workout.id === editId) return true;
     });
-    this._workouts.splice(index, index + 1);
+    L.marker(this._workouts[index].coords).removeFrom(map);
+    this._workouts.splice(index, 1);
+    markers[index].remove();
+    markers.splice(index, 1);
+    this._setLocalStorage();
   }
 
   _editWorkout(e) {
