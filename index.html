@@ -33,6 +33,39 @@
     <div class="sidebar">
       <img src="logo.png" alt="Logo" class="logo" />
 
+      <div class="topbar">
+        <div class="sort">
+          <a href="#" class="sort--btn"> sort </a>
+          <div class="sort__options">
+            <div class="sort__option">
+              <input
+                type="radio"
+                class="radio"
+                id="default"
+                name="sorting"
+                checked="checked"
+              /><label for="default">default</label>
+            </div>
+            <div class="sort__option">
+              <input
+                type="radio"
+                class="radio"
+                id="distance"
+                name="sorting"
+              /><label for="distance">distance</label>
+            </div>
+            <div class="sort__option">
+              <input
+                type="radio"
+                class="radio"
+                id="duration"
+                name="sorting"
+              /><label for="duration">duration</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <ul class="workouts">
         <form class="form hidden">
           <div class="form__row">

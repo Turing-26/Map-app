@@ -7,6 +7,9 @@ const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
+const btnSort = document.querySelector('.sort--btn');
+const sortOptionsContainer = document.querySelector('.sort__options');
+const sortOptions = document.querySelectorAll('.sort__option');
 let workoutEditEl;
 
 class Workout {
@@ -105,6 +108,10 @@ class App {
         this.#editId = e.target.closest('.workout').dataset.id;
         this._delWorkout();
       }
+    });
+
+    btnSort.addEventListener('click', () => {
+      sortOptionsContainer.classList.toggle('active');
     });
   }
 

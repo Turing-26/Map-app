@@ -57,11 +57,84 @@ a:visited {
   margin-bottom: 4rem;
 }
 
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 5px;
+
+  /* position: relative; */
+}
+
+.sort {
+  /*select-box*/
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  text-transform: uppercase;
+  /* position: absolute; */
+  background-color: var(--color-dark--2);
+}
+
+.sort label {
+  cursor: pointer;
+}
+
+.sort__options {
+  /*options-container*/
+  background-color: var(--color-dark--2);
+  color: var(--color-light--1);
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.4s;
+  border-radius: 0 0 5px 5px;
+  overflow: hidden;
+}
+
+.sort__options.active {
+  max-height: 200px;
+  opacity: 1;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.sort__option,
+.sort--btn {
+  /*option*/
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.sort--btn:link,
+.sort--btn:visited {
+  /*selected*/
+  color: inherit;
+  text-decoration: none;
+  background-color: var(--color-dark--2);
+  border-radius: 5px;
+  color: inherit;
+}
+
+.sort__option:hover,
+.sort--btn:hover,
+.sort--btn:active {
+  background-color: var(--color-light--3);
+  color: var(--color-dark--1);
+}
+
+.radio {
+  display: none;
+}
+
+.radio:checked + label {
+  color: var(--color-brand--1);
+}
+
 .workouts {
   list-style: none;
   height: 77vh;
   overflow-y: scroll;
   overflow-x: hidden;
+  scrollbar-width: none;
 }
 
 .workouts::-webkit-scrollbar {
