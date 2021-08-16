@@ -2,6 +2,7 @@
 
 const form = document.querySelector('.form');
 const containerWorkouts = document.querySelector('.workouts');
+const workoutElements = containerWorkouts.getElementsByTagName('li');
 const inputType = document.querySelector('.form__input--type');
 const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
@@ -10,6 +11,7 @@ const inputElevation = document.querySelector('.form__input--elevation');
 const btnSort = document.querySelector('.sort--btn');
 const sortOptionsContainer = document.querySelector('.sort__options');
 const sortOptions = document.querySelectorAll('.sort__option');
+const sortRadios = document.querySelectorAll('input[name="sorting"]');
 let workoutEditEl;
 
 class Workout {
@@ -82,6 +84,7 @@ class App {
   #mapEvent;
   #mapZoomLevel = 15;
   #markers = [];
+  #sortType = 'default';
   #editId;
 
   constructor() {
@@ -90,12 +93,35 @@ class App {
     this._getPosition();
     this._getLocalStorage();
 
+    //Default sorting type
+    sortRadios.forEach(sort => {
+      if (sort.checked) btnSort.innerHTML = this.#sortType;
+    });
+
+    btnSort.addEventListener('click', () => {
+      sortOptionsContainer.classList.toggle('active');
+    });
+
+    sortOptionsContainer.addEventListener('click', e => {
+      if (e.target.tagName.toLowerCase() === 'label') {
+        this.#sortType = e.target.closest('label').innerHTML;
+        btnSort.innerHTML = this.#sortType;
+        sortOptionsContainer.classList.remove('active');
+        this._sortWorkouts(this.#sortType);
+        while (workoutElements.length > 0) {
+          containerWorkouts.removeChild(workoutElements[0]);
+        }
+        this._workouts.forEach(workout => this._renderWorkout(workout));
+      }
+    });
+
     // form.addEventListener('submit', this._newWorkout.bind(this));
     form.addEventListener('submit', e => {
       if (this.#editId) this._editWorkout(e);
       else this._newWorkout(e);
       this.#editId = '';
     });
+
     inputType.addEventListener('change', this._toggleElevationField);
     // containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
     containerWorkouts.addEventListener('click', e => {
@@ -109,17 +135,15 @@ class App {
         this._delWorkout();
       }
     });
+  }
 
-    btnSort.addEventListener('click', () => {
-      sortOptionsContainer.classList.toggle('active');
-    });
-
-    sortOptionsContainer.addEventListener('click', e => {
-      if (e.target.tagName.toLowerCase() === 'label') {
-        btnSort.innerHTML = e.target.closest('label').innerHTML;
-        sortOptionsContainer.classList.remove('active');
-      }
-    });
+  _sortWorkouts(type) {
+    if (type === 'default')
+      this._workouts.sort((a, b) => new Date(a.date) - new Date(b.date));
+    if (type === 'distance')
+      this._workouts.sort((a, b) => a.distance > b.distance);
+    if (type === 'duration')
+      this._workouts.sort((a, b) => a.duration > b.duration);
   }
 
   _getPosition() {
@@ -443,6 +467,7 @@ class App {
     if (!data) return;
 
     this._workouts = data;
+    this._sortWorkouts(this.#sortType);
     this._workouts.forEach(workout => {
       this._renderWorkout(workout);
       if (workout.type === 'running') {
