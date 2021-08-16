@@ -113,6 +113,13 @@ class App {
     btnSort.addEventListener('click', () => {
       sortOptionsContainer.classList.toggle('active');
     });
+
+    sortOptionsContainer.addEventListener('click', e => {
+      if (e.target.tagName.toLowerCase() === 'label') {
+        btnSort.innerHTML = e.target.closest('label').innerHTML;
+        sortOptionsContainer.classList.remove('active');
+      }
+    });
   }
 
   _getPosition() {

@@ -73,21 +73,24 @@ a:visited {
   text-transform: uppercase;
   /* position: absolute; */
   background-color: var(--color-dark--2);
+  color: var(--color-light--3);
+  font-weight: 800;
+  font-size: 1.1rem;
+  overflow: hidden;
 }
 
 .sort label {
   cursor: pointer;
+  display: block;
+  padding: 5px 10px;
+  width: 100%;
 }
 
 .sort__options {
-  /*options-container*/
-  background-color: var(--color-dark--2);
-  color: var(--color-light--1);
+  /* options-container */
   max-height: 0;
   opacity: 0;
   transition: all 0.4s;
-  border-radius: 0 0 5px 5px;
-  overflow: hidden;
 }
 
 .sort__options.active {
@@ -97,7 +100,10 @@ a:visited {
   scrollbar-width: none;
 }
 
-.sort__option,
+.sort--btn + .sort__options.active {
+  border-top: 1px solid var(--color-dark--1);
+}
+
 .sort--btn {
   /*option*/
   padding: 5px 10px;
@@ -109,8 +115,6 @@ a:visited {
   /*selected*/
   color: inherit;
   text-decoration: none;
-  background-color: var(--color-dark--2);
-  border-radius: 5px;
   color: inherit;
 }
 
@@ -118,15 +122,19 @@ a:visited {
 .sort--btn:hover,
 .sort--btn:active {
   background-color: var(--color-light--3);
-  color: var(--color-dark--1);
+  color: var(--color-dark--2);
 }
 
 .radio {
   display: none;
 }
 
-.radio:checked + label {
-  color: var(--color-brand--1);
+.sort__option .radio:checked + label {
+  color: var(--color-brand--2);
+}
+
+.sort__option:hover .radio:checked + label {
+  color: var(--color-dark--2);
 }
 
 .workouts {
