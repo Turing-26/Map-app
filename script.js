@@ -12,7 +12,6 @@ const btnSort = document.querySelector('.sort--btn');
 const sortOptionsContainer = document.querySelector('.sort__options');
 const sortOptions = document.querySelectorAll('.sort__option');
 const sortRadios = document.querySelectorAll('input[name="sorting"]');
-let workoutEditEl;
 
 class Workout {
   date = new Date();
@@ -86,6 +85,7 @@ class App {
   #markers = [];
   #sortType = 'default';
   #editId;
+  #workoutEditEl;
 
   constructor() {
     // as the constructor is called as soon as an object is created we are using it to call all the methods we need initially
@@ -357,7 +357,7 @@ class App {
         </div>
       </li>`;
     if (!this.#editId) form.insertAdjacentHTML('afterend', html);
-    else workoutEditEl.insertAdjacentHTML('afterend', html);
+    else this.#workoutEditEl.insertAdjacentHTML('afterend', html);
   }
 
   _moveToPopup(e) {
@@ -385,10 +385,10 @@ class App {
   }
 
   _delWorkout() {
-    workoutEditEl = Array.from(document.querySelectorAll('.workout')).find(
-      work => work.dataset.id === this.#editId
-    );
-    workoutEditEl.parentNode.removeChild(workoutEditEl);
+    this.#workoutEditEl = Array.from(
+      document.querySelectorAll('.workout')
+    ).find(work => work.dataset.id === this.#editId);
+    this.#workoutEditEl.parentNode.removeChild(this.#workoutEditEl);
 
     const index = this._workouts.findIndex(workout => {
       if (workout.id === this.#editId) return true;
@@ -401,10 +401,10 @@ class App {
 
   _editWorkout(e) {
     e.preventDefault();
-    workoutEditEl = Array.from(document.querySelectorAll('.workout')).find(
-      work => work.dataset.id === this.#editId
-    );
-    console.log(workoutEditEl);
+    this.#workoutEditEl = Array.from(
+      document.querySelectorAll('.workout')
+    ).find(work => work.dataset.id === this.#editId);
+    console.log(this.#workoutEditEl);
 
     const workout = this._workouts.find(work => work.id === this.#editId);
 
@@ -456,7 +456,7 @@ class App {
 
     this._hideForm();
     this._renderWorkout(workout);
-    workoutEditEl.parentNode.removeChild(workoutEditEl);
+    this.#workoutEditEl.parentNode.removeChild(this.#workoutEditEl);
     this._setLocalStorage();
   }
 
