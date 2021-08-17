@@ -91,12 +91,15 @@ class App {
     // as the constructor is called as soon as an object is created we are using it to call all the methods we need initially
     this._workouts = [];
     this._getPosition();
-    this._getLocalStorage();
 
     //Default sorting type
     sortRadios.forEach(sort => {
-      if (sort.checked) btnSort.innerHTML = this.#sortType;
+      if (sort.checked) {
+        this.#sortType = sort.nextSibling.getAttribute('for');
+        btnSort.innerHTML = this.#sortType;
+      }
     });
+    this._getLocalStorage();
 
     btnSort.addEventListener('click', () => {
       sortOptionsContainer.classList.toggle('active');
