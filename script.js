@@ -93,13 +93,7 @@ class App {
     this._getPosition();
 
     //Default sorting type
-    sortRadios.forEach(sort => {
-      if (sort.checked) {
-        this.#sortType = sort.nextSibling.getAttribute('for');
-        btnSort.innerHTML = this.#sortType;
-        sort.closest('.sort__option').classList.add('hidden');
-      }
-    });
+    sortRadios.forEach(option => this._setSortType(option));
     this._getLocalStorage();
 
     btnSort.addEventListener('click', () => {
@@ -108,12 +102,11 @@ class App {
 
     sortOptionsContainer.addEventListener('click', e => {
       if (e.target.tagName.toLowerCase() === 'label') {
-        this.#sortType = e.target.innerHTML;
-        btnSort.innerHTML = this.#sortType;
+        e.target.previousElementSibling.checked = 'checked';
+        sortOptions.forEach(option => option.classList.remove('hidden'));
+        this._setSortType(e.target.previousElementSibling);
         sortOptionsContainer.classList.remove('active');
         this._sortWorkouts(this.#sortType);
-        sortOptions.forEach(option => option.classList.remove('hidden'));
-        e.target.closest('.sort__option').classList.add('hidden');
         while (workoutElements.length > 0) {
           containerWorkouts.removeChild(workoutElements[0]);
         }
@@ -141,6 +134,14 @@ class App {
         this._delWorkout();
       }
     });
+  }
+
+  _setSortType(option) {
+    if (option.checked) {
+      this.#sortType = option.id;
+      btnSort.innerHTML = this.#sortType;
+      option.closest('.sort__option').classList.add('hidden');
+    }
   }
 
   _sortWorkouts(type) {
