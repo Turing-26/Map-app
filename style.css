@@ -137,6 +137,10 @@ a:visited {
   color: var(--color-dark--2);
 }
 
+.sort__option.hidden {
+  display: none;
+}
+
 .workouts {
   list-style: none;
   height: 77vh;

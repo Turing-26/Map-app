@@ -97,6 +97,7 @@ class App {
       if (sort.checked) {
         this.#sortType = sort.nextSibling.getAttribute('for');
         btnSort.innerHTML = this.#sortType;
+        sort.closest('.sort__option').classList.add('hidden');
       }
     });
     this._getLocalStorage();
@@ -107,10 +108,12 @@ class App {
 
     sortOptionsContainer.addEventListener('click', e => {
       if (e.target.tagName.toLowerCase() === 'label') {
-        this.#sortType = e.target.closest('label').innerHTML;
+        this.#sortType = e.target.innerHTML;
         btnSort.innerHTML = this.#sortType;
         sortOptionsContainer.classList.remove('active');
         this._sortWorkouts(this.#sortType);
+        sortOptions.forEach(option => option.classList.remove('hidden'));
+        e.target.closest('.sort__option').classList.add('hidden');
         while (workoutElements.length > 0) {
           containerWorkouts.removeChild(workoutElements[0]);
         }
