@@ -148,9 +148,9 @@ class App {
     if (type === 'default')
       this._workouts.sort((a, b) => new Date(a.date) - new Date(b.date));
     if (type === 'distance')
-      this._workouts.sort((a, b) => a.distance > b.distance);
+      this._workouts.sort((a, b) => a.distance - b.distance);
     if (type === 'duration')
-      this._workouts.sort((a, b) => a.duration > b.duration);
+      this._workouts.sort((a, b) => a.duration - b.duration);
   }
 
   _getPosition() {
